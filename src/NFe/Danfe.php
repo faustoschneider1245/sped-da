@@ -574,19 +574,7 @@ class Danfe extends DaCommon
                 $formaPag[$fPag] = $fPag;
             }
         }
-        //caso tenha boleto imprimir fatura
-        if ($this->dup->length > 0) {
-            $y = $this->fatura($x, $y+1);
-        } else {
-            //Se somente tiver a forma de pagamento sem pagamento ou outros não imprimir nada
-            if (count($formaPag)=='1' && (isset($formaPag[90]) || isset($formaPag[99]))) {
-                $y = $y;
-            } else {
-                //caso tenha mais de uma forma de pagamento ou seja diferente de boleto exibe a
-                //forma de pagamento e o valor
-                $y = $this->pagamento($x, $y+1);
-            }
-        }
+        
         //coloca os dados dos impostos e totais da NFe
         $y = $this->imposto($x, $y+1);
         //coloca os dados do trasnporte
@@ -2482,14 +2470,7 @@ class Danfe extends DaCommon
             $impostos .= $this->descricaoProdutoHelper($ICMS, "pST", " pSt=%s");
             $impostos .= $this->descricaoProdutoHelper($ICMS, "vICMSSTRet", " VALOR ICMS ST=%s");
         }
-        if (!empty($ICMSUFDest)) {
-            $impostos .= $this->descricaoProdutoHelper($ICMSUFDest, "pFCPUFDest", " pFCPUFDest=%s%%");
-            $impostos .= $this->descricaoProdutoHelper($ICMSUFDest, "pICMSUFDest", " pICMSUFDest=%s%%");
-            $impostos .= $this->descricaoProdutoHelper($ICMSUFDest, "pICMSInterPart", " pICMSInterPart=%s%%");
-            $impostos .= $this->descricaoProdutoHelper($ICMSUFDest, "vFCPUFDest", " vFCPUFDest=%s");
-            $impostos .= $this->descricaoProdutoHelper($ICMSUFDest, "vICMSUFDest", " vICMSUFDest=%s");
-            $impostos .= $this->descricaoProdutoHelper($ICMSUFDest, "vICMSUFRemet", " vICMSUFRemet=%s");
-        }
+        
         $infAdProd = ! empty($itemProd->getElementsByTagName('infAdProd')->item(0)->nodeValue)
         ? substr(
             $this->anfaveaDANFE($itemProd->getElementsByTagName('infAdProd')->item(0)->nodeValue),
